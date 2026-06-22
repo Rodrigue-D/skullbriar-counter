@@ -451,17 +451,6 @@ function renderHero(){
   const p11=getN(c,'p1p1'), m11=getN(c,'m1m1');
   const cls = p11>m11 ? 'buffed' : (m11>p11 ? 'debuffed' : '');
 
-  const badges=[];
-  const dmg = combatDamage(c);
-  const ds = getN(c,'doublestrike')>0;
-  badges.push(`<span class="badge dmg">⚔️ ${dmg} dégâts${ds?' <small>(double)</small>':''}</span>`);
-  if(getN(c,'lifelink')>0) badges.push(`<span class="badge life">❤️ +${dmg} vie</span>`);
-  if(getN(c,'deathtouch')>0) badges.push(`<span class="badge death">☠️ létal au contact</span>`);
-  if(getN(c,'firststrike')>0 && !ds) badges.push(`<span class="badge">🗡️ initiative</span>`);
-  if(getN(c,'trample')>0) badges.push(`<span class="badge">🐘 piétinement</span>`);
-  if(getN(c,'flying')>0) badges.push(`<span class="badge">🪶 vol</span>`);
-  if(getN(c,'indestructible')>0) badges.push(`<span class="badge">💎 indestructible</span>`);
-
   const showArt = c.cmd && HAS_ART;
   const heroEl = document.getElementById('hero');
   heroEl.classList.toggle('hasart', showArt);
@@ -472,8 +461,6 @@ function renderHero(){
       <span class="num ${cls}">${p}</span><span class="slash">/</span><span class="num ${cls}">${t}</span>
     </div>
     <div class="pt-lbl">Force / Endurance</div>
-    <div class="basenote">base <b>${bp}/${bt}</b> ${p11?`<b>+${p11}</b> compteur(s) +1/+1`:''}${m11?` <b>−${m11}</b> compteur(s) −1/−1`:''}${(!p11&&!m11)?'· aucun compteur +1/+1':''}</div>
-    <div class="badges">${badges.join('')}</div>
     <div class="p1p1">
       <div class="lbl">＋1/＋1 <small>tape le nombre pour saisir</small></div>
       <div class="stepper">
