@@ -229,7 +229,7 @@
     <span>Compteurs sur la carte</span>
     <div class="right">
       <button class="pill green act" data-act="proliferate" id="prolifBtn">✦ Proliférer</button>
-      <button class="pill brawler act" data-act="brawler" id="brawlerBtn" title="+4 +1/+1, Vol, Vigilance, Piétinement, Lien de vie">🥊 Brawker</button>
+      <button class="pill brawler act" data-act="brawler" id="brawlerBtn" title="+4 +1/+1, Vol, Vigilance, Piétinement, Lien de vie">🥊 Brawler</button>
     </div>
   </div>
   <div class="actlist" id="actlist"></div>
@@ -398,7 +398,7 @@ function proliferate(){
   annihilate(c);
   save(); render(); toast('Proliféré : +1 sur '+ids.length+' type(s)');
 }
-// Préréglage « Brawker » : +4 compteurs +1/+1 et accorde Vol, Vigilance,
+// Préréglage « Brawler » : +4 compteurs +1/+1 et accorde Vol, Vigilance,
 // Piétinement et Lien de vie (ajout d'1 compteur sur le mot-clé s'il est absent).
 function brawler(){
   const c = active();
@@ -407,7 +407,7 @@ function brawler(){
   ['flying','vigilance','trample','lifelink'].forEach(id=>{ if(getN(c,id)<1) setN(c,id,1); });
   annihilate(c);
   save(); render();
-  toast('Brawker : +4 +1/+1 · Vol · Vigilance · Piétinement · Lien de vie');
+  toast('Brawler : +4 +1/+1 · Vol · Vigilance · Piétinement · Lien de vie');
 }
 function cmdDmg(oid, d){
   snapshot();
