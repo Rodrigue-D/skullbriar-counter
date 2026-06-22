@@ -111,6 +111,7 @@
   .sec-title .right{display:flex; gap:8px; align-items:center;}
   .pill{font-size:11px; font-weight:800; padding:5px 10px; border-radius:9px; letter-spacing:.3px; text-transform:none;}
   .pill.green{background:rgba(124,201,79,.14); color:var(--green2); border:1px solid var(--line2);}
+  .pill.brawler{background:rgba(125,79,163,.18); color:#c98bd6; border:1px solid #4a3550;}
   .pill.act:active{transform:scale(.93);}
 
   /* active counters — 2 colonnes compactes */
@@ -228,6 +229,7 @@
     <span>Compteurs sur la carte</span>
     <div class="right">
       <button class="pill green act" data-act="proliferate" id="prolifBtn">✦ Proliférer</button>
+      <button class="pill brawler act" data-act="brawler" id="brawlerBtn" title="+4 +1/+1, Vol, Vigilance, Piétinement, Lien de vie">🥊 Brawker</button>
     </div>
   </div>
   <div class="actlist" id="actlist"></div>
@@ -301,13 +303,32 @@ function defaultState(){
     seq:1
   };
 }
+// Générateur d'identifiant unique : compteur monotone (+ horodatage) => jamais de
+// doublon, même pour plusieurs créations dans la même milliseconde.
+// Corrige le bug des dégâts de commandant (adversaires 2/3 partageaient l'id du 1).
+let _uidSeq = 0;
+function uid(prefix){ return prefix + Date.now().toString(36) + '_' + (_uidSeq++).toString(36); }
 function newCreature(name, p, t, isCmd){
-  return { id:'c'+(Date.now())+Math.floor(performance.now()*1000%1000), name, baseP:p, baseT:t, cmd:!!isCmd, counts:{} };
+  return { id:uid('c'), name, baseP:p, baseT:t, cmd:!!isCmd, counts:{} };
 }
-function newOpp(name){ return { id:'o'+(Date.now())+Math.floor(performance.now()*1000%1000)+Math.floor(performance.now()%97), name, dmg:0 }; }
+function newOpp(name){ return { id:uid('o'), name, dmg:0 }; }
 
+// Migration : d'anciennes sauvegardes peuvent contenir des ids dupliqués
+// (adversaires créés dans la même milliseconde). On ré-attribue tout doublon.
+function ensureUniqueIds(s){
+  const seen = new Set();
+  const fix = (arr, prefix) => {
+    if(!Array.isArray(arr)) return;
+    arr.forEach(o=>{
+      if(!o || !o.id || seen.has(o.id)) o.id = uid(prefix);
+      seen.add(o.id);
+    });
+  };
+  fix(s.creatures, 'c');
+  fix(s.opponents, 'o');
+}
 function load(){
-  try{ const s = JSON.parse(localStorage.getItem(KEY)); if(s && s.creatures) return s; }catch(e){}
+  try{ const s = JSON.parse(localStorage.getItem(KEY)); if(s && s.creatures){ ensureUniqueIds(s); return s; } }catch(e){}
   return defaultState();
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
@@ -376,6 +397,17 @@ function proliferate(){
   ids.forEach(k=> c.counts[k]+=1);
   annihilate(c);
   save(); render(); toast('Proliféré : +1 sur '+ids.length+' type(s)');
+}
+// Préréglage « Brawker » : +4 compteurs +1/+1 et accorde Vol, Vigilance,
+// Piétinement et Lien de vie (ajout d'1 compteur sur le mot-clé s'il est absent).
+function brawler(){
+  const c = active();
+  snapshot();
+  setN(c,'p1p1', getN(c,'p1p1')+4);
+  ['flying','vigilance','trample','lifelink'].forEach(id=>{ if(getN(c,id)<1) setN(c,id,1); });
+  annihilate(c);
+  save(); render();
+  toast('Brawker : +4 +1/+1 · Vol · Vigilance · Piétinement · Lien de vie');
 }
 function cmdDmg(oid, d){
   snapshot();
@@ -554,6 +586,7 @@ document.addEventListener('click', e=>{
     case 'set':        setCount(t.dataset.id); break;
     case 'add':        bump(t.dataset.id, 1); break;
     case 'proliferate':proliferate(); break;
+    case 'brawler':    brawler(); break;
     case 'undo':       undo(); break;
     case 'switch':     state.activeId=t.dataset.id; save(); render(); break;
     case 'addCreature':openCreatureModal(null); break;
@@ -673,6 +706,7 @@ function toast(msg){
 state = load();
 if(!state.activeId) state.activeId = state.creatures[0].id;
 if(typeof state.seq!=='number') state.seq=1;
+save();   // persiste la dé-duplication des ids dès l'ouverture
 render();
 </script>
 </body>
