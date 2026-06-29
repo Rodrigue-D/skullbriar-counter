@@ -115,17 +115,18 @@
   .pill.act:active{transform:scale(.93);}
 
   /* active counters — 2 colonnes compactes */
-  .actlist{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px;}
+  .actlist{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; grid-auto-flow:row dense;}
   .actrow{display:flex; align-items:center; justify-content:space-between; gap:6px; padding:6px 6px 6px 10px;
     background:linear-gradient(135deg,#16210f,#1a2812); border:1px solid var(--green); border-radius:13px; min-width:0;}
   .actrow.minus11{background:linear-gradient(135deg,#241312,#2a1716); border-color:#6e342f;}
-  .actrow .lab{display:flex; align-items:center; gap:6px; min-width:0; flex:1;}
-  .actrow .emoji{font-size:16px; flex-shrink:0;} .actrow .nm{font-size:12.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .actrow .stepper{flex-shrink:0;}
-  .actrow .sbtn{width:34px; height:34px; font-size:19px; border-radius:9px;}
-  .actrow .sval{min-width:26px; font-size:18px;}
-  .actrow .stepper .sbtn{width:36px; height:36px; font-size:19px; border-radius:10px;}
-  .actrow .stepper .sval{min-width:24px; font-size:17px;}
+  .actrow .lab{display:flex; align-items:center; gap:7px; min-width:0; flex:1;}
+  .actrow .emoji{font-size:17px; flex-shrink:0;}
+  .actrow .nm{font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  /* Compteur sur UNE ligne : ligne entière tapable (1 clic = retirer, 2 clics = ajouter), aucun bouton */
+  .actrow.cnt{cursor:pointer; min-height:48px; padding:6px 12px; touch-action:manipulation; user-select:none; -webkit-user-select:none;}
+  .actrow.cnt:active{transform:scale(.98); filter:brightness(1.12);}
+  .actrow .cval{flex-shrink:0; font-size:21px; font-weight:800; font-variant-numeric:tabular-nums; color:var(--green2); min-width:20px; text-align:right;}
+  .actrow.minus11 .cval{color:var(--red);}
   .actrow.wide{grid-column:span 2;}
   .empty{grid-column:span 2; padding:14px; text-align:center; color:var(--dim2); font-size:13px; background:var(--card); border:1px dashed var(--line); border-radius:15px;}
 
@@ -141,37 +142,27 @@
   .pchip.addnew{border-style:dashed; color:var(--green2); justify-content:center; grid-column:span 2;}
 
   /* ---------- Commander tax ---------- */
-  .tax{background:linear-gradient(135deg,#1a1320,var(--purpleBg)); border:1px solid #3a2b3f; border-radius:18px; padding:14px; margin-bottom:4px;}
-  .tax .head{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
-  .tax .tt{font-size:14px; font-weight:800; color:#ecd9f5;}
-  .tax .td{font-size:11px; color:#b59ec2; margin-top:2px;}
-  .tax .taxbig{font-size:34px; font-weight:800; color:var(--gold); font-variant-numeric:tabular-nums; line-height:1;}
-  .tax .taxbig small{font-size:13px; color:var(--goldDim); font-weight:700;}
-  .tax .row{display:flex; align-items:center; justify-content:space-between;}
-  .tax .row .lab{font-size:13px; color:#cdb8d6; font-weight:600;}
-  .tax .sbtn{border-color:#43344a; background:#2a1f30;} .tax .sbtn:active{background:#372842;}
-  .tax .sbtn.plus{color:#d9b6ec;} .tax .sbtn.minus{color:#c98a8a;}
+  .tax{display:flex; align-items:center; justify-content:space-between; gap:10px; background:linear-gradient(135deg,#1a1320,var(--purpleBg)); border:1px solid #3a2b3f; border-radius:13px; padding:8px 12px; margin-bottom:4px;}
+  .mcost{display:inline-flex; align-items:center; gap:4px;}
+  .mcost svg{width:26px; height:26px; display:block;}
+  .mp{display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; font-size:14px; font-weight:800; font-variant-numeric:tabular-nums;}
+  .mp.gen{background:#CAC5C0; color:#0D0F0F;}
+  .tax .taxctl{display:flex; align-items:center; gap:7px;}
+  .tax .taxlbl{font-size:11px; color:#cdb8d6; font-weight:600;}
+  .tax .sbtn{width:34px; height:34px; font-size:19px; border:1px solid #43344a; background:#2a1f30;}
+  .tax .sbtn:active{background:#372842;} .tax .sbtn.plus{color:#d9b6ec;} .tax .sbtn.minus{color:#c98a8a;}
 
   /* ---------- Commander damage ---------- */
-  .opp{background:var(--card); border:1px solid var(--line); border-radius:15px; padding:12px 12px 10px; margin-bottom:8px;}
+  .opp{display:flex; align-items:center; gap:6px; background:var(--card); border:1px solid var(--line); border-radius:13px; padding:6px 8px; margin-bottom:7px;}
   .opp.lethal{border-color:var(--red); background:linear-gradient(135deg,#241312,#1a1010); box-shadow:0 0 0 1px var(--red) inset;}
-  .opp .top{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:9px;}
-  .opp .name{font-size:14px; font-weight:700; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .opp .name .edit{color:var(--dim2); font-size:11px; margin-left:5px;}
-  .opp .dmgval{font-size:20px; font-weight:800; font-variant-numeric:tabular-nums; min-width:62px; text-align:center;}
-  .opp .dmgval .of{font-size:12px; color:var(--dim2); font-weight:600;}
+  .opp .name{font-size:13.5px; font-weight:700; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .opp .dmgval{font-size:18px; font-weight:800; font-variant-numeric:tabular-nums; flex-shrink:0; min-width:46px; text-align:right;}
+  .opp .dmgval .of{font-size:11px; color:var(--dim2); font-weight:600;}
   .opp.lethal .dmgval{color:var(--red);}
-  .opp .bar{height:7px; border-radius:6px; background:var(--bg2); overflow:hidden; margin-bottom:9px; border:1px solid var(--line);}
-  .opp .bar > i{display:block; height:100%; background:linear-gradient(90deg,var(--green),var(--green2)); transition:width .25s;}
-  .opp.lethal .bar > i{background:linear-gradient(90deg,#a33,#d8584f);}
-  .opp .ctrls{display:flex; align-items:center; gap:8px;}
-  .opp .ctrls .stepper{flex:1; justify-content:space-between;}
-  .opp .ctrls .sbtn{width:46px; height:42px; font-size:22px;}
-  .opp .combatbtn{flex-shrink:0; padding:0 12px; height:42px; border-radius:12px; background:rgba(124,201,79,.12);
-    border:1px solid var(--line2); color:var(--green2); font-size:12px; font-weight:800; display:flex; align-items:center; gap:5px;}
+  .opp .sbtn{width:38px; height:38px; font-size:20px; flex-shrink:0;}
+  .opp .combatbtn{flex-shrink:0; width:40px; height:38px; border-radius:11px; background:rgba(124,201,79,.12); border:1px solid var(--line2); display:flex; align-items:center; justify-content:center; font-size:16px;}
   .opp .combatbtn:active{transform:scale(.94); background:rgba(124,201,79,.2);}
-  .opp .del{color:var(--dim2); font-size:15px; padding:4px 6px;}
-  .lethal-tag{font-size:10px; font-weight:800; color:var(--red); border:1px solid var(--red); border-radius:7px; padding:2px 6px; letter-spacing:.5px;}
+  .opp .del{color:var(--dim2); font-size:14px; padding:2px 5px; flex-shrink:0;}
   .addopp{width:100%; padding:13px; border-radius:14px; background:var(--card2); border:1px dashed var(--line);
     color:var(--blue); font-size:13px; font-weight:700; margin-top:2px;}
 
@@ -225,6 +216,8 @@
 
   <div class="tabs" id="tabs"></div>
 
+  <div class="tax" id="tax"></div>
+
   <div class="hero" id="hero"></div>
 
   <div class="sec-title">
@@ -239,9 +232,6 @@
   <div class="sec-title"><span>Ajouter un compteur</span></div>
   <div class="palette" id="palette"></div>
 
-  <div class="sec-title"><span>Taxe de commandement</span></div>
-  <div class="tax" id="tax"></div>
-
   <div class="sec-title">
     <span>Dégâts de commandant <span style="color:var(--dim2)">· 21 = létal</span></span>
   </div>
@@ -249,8 +239,7 @@
   <button class="addopp" data-act="addOpp">＋ Ajouter un adversaire</button>
 
   <div class="footer">
-    Sauvegarde automatique sur l'appareil.<br>
-    <b>Astuce :</b> Partager ⬆️ → « Sur l'écran d'accueil » pour le plein écran.
+    Sauvegarde automatique sur l'appareil.
   </div>
 </div>
 
@@ -481,19 +470,16 @@ function renderActive(){
     return;
   }
   document.getElementById('prolifBtn').style.opacity='1';
-  // ordre : m1m1 puis le reste par valeur décroissante
+  // ordre : m1m1 d'abord, puis le reste par valeur décroissante
   types.sort((a,b)=> (a.id==='m1m1'?-1:b.id==='m1m1'?1: getN(c,b.id)-getN(c,a.id)));
+  // tous les marqueurs sont des compteurs numériques : une créature peut en porter
+  // plusieurs du même type (compte pour la prolifération / le déplacement de marqueurs).
   types.forEach(t=>{
     const v=getN(c,t.id);
     const row=document.createElement('div');
-    row.className='actrow'+(t.id==='m1m1'?' minus11':'');
-    row.innerHTML=`
-      <div class="lab"><span class="emoji">${t.e}</span><span class="nm">${esc(t.n)}</span></div>
-      <div class="stepper">
-        <button class="sbtn minus" data-act="bump" data-id="${t.id}" data-d="-1">−</button>
-        <div class="sval" data-act="set" data-id="${t.id}">${v}</div>
-        <button class="sbtn plus" data-act="bump" data-id="${t.id}" data-d="1">＋</button>
-      </div>`;
+    row.className='actrow cnt'+(t.id==='m1m1'?' minus11':'');
+    row.dataset.act='cnt'; row.dataset.id=t.id;
+    row.innerHTML=`<div class="lab"><span class="emoji">${t.e}</span><span class="nm">${esc(t.n)}</span></div><span class="cval">${v}</span>`;
     el.appendChild(row);
   });
 }
@@ -516,52 +502,62 @@ function renderPalette(){
   el.appendChild(add);
 }
 
+// Symboles de mana officiels (SVG embarqués, 100% hors-ligne) — source Scryfall
+const MANA_SVG = {
+  B: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g fill="none" fill-rule="evenodd"><circle fill="#CAC5C0" cx="50" cy="50" r="50"/><path d="M90.695 48.14c0 5.463-2.008 9.189-6.02 11.175-1.172.58-4.85 1.365-11.037 2.36-4.012.663-6.018 2.194-6.018 4.592v10.058c0 .418.125 1.698.375 3.85l.377 3.975c0 1.242-.293 3.273-.879 6.085-1.588.33-3.428.702-5.518 1.12-.67-2.486-1.004-4.182-1.004-5.095 0-.411.105-1.034.313-1.863.207-.826.316-1.447.316-1.864 0-.575-.52-2.191-1.559-4.839h-1.945c-.258.414-.344.952-.26 1.613.334 1.408.459 2.607.377 3.6a282.655 282.655 0 0 1-5.895 3.974c-.586-.164-.793-.247-.629-.247v-8.816c-.164-.412-.584-.575-1.254-.497h-1.504l-1.504 11.67c-1.174.083-2.592.083-4.264 0-.588-2.73-1.631-6.785-3.135-12.167h-1.004c-.922 2.9-1.422 4.474-1.506 4.722 0 .33.104.97.314 1.922.207.953.313 1.593.313 1.924 0 .248-.084.868-.25 1.862l-.377 2.98a.862.862 0 0 1-.627.248c-2.508 0-4.182-.62-5.016-1.86-.836-1.244-1.172-2.982-1.004-5.219l1.004-14.898c0-.25.082-.58.25-.994.164-.414.25-.704.25-.868 0-.664-.711-1.989-2.131-3.975-.248-.08-1.549-.373-3.887-.87-1.424-.33-4.225-.909-8.402-1.739-5.771-1.073-8.654-5.668-8.654-13.782 0-12.086 5.018-22.143 15.051-30.173.414 2.236 1.127 5.214 2.129 8.94.754.168 2.385.54 4.891 1.117.504.167 3.053 1.078 7.652 2.733-2.344-1.408-5.393-3.682-9.156-6.83-1.422-1.655-2.133-4.426-2.133-8.316 0-.911 1.59-1.989 4.768-3.232 2.84-1.159 4.975-1.818 6.396-1.986 4.514-.577 7.984-.87 10.41-.87 10.449 0 18.891 2.65 25.328 7.949-2.088 2.402-5.684 4.964-10.783 7.696 2.008.083 4.934-.7 8.779-2.36 3.844-1.653 5.475-2.483 4.891-2.483.668 0 2.008 1.327 4.014 3.975 1.504 1.986 2.715 3.769 3.637 5.337 2.674 4.721 4.471 9.81 5.393 15.274 0 1.906.041 3.272.125 4.098v.994h.002Zm-48.031 2.235c0-3.558-1.568-6.932-4.703-10.122-3.137-3.187-6.502-4.778-10.096-4.778-3.178 0-5.977 1.335-8.402 4-2.426 2.666-3.637 5.625-3.637 8.874 0 2.83 1.379 4.666 4.139 5.498 1.756.5 4.219.793 7.398.874h6.898c5.598.083 8.403-1.366 8.403-4.346Zm13.668 15.4v-3.851a120.953 120.953 0 0 1-1.754-3.354c-.502-1.657-1.422-3.974-2.76-6.955l-1.381 14.529c0 1.16-.25 1.738-.752 1.738-.334 0-.584-.081-.752-.245-.586-8.776-.879-12.584-.879-11.427v-4.344c-.168-.251-.375-.375-.625-.375-2.844 2.901-4.264 7.576-4.264 14.032 0 3.56.33 5.753 1.002 6.582.67-.164 1.422-.455 2.258-.868.334-.167 1.295-.25 2.887-.25 1.584 0 3.51.497 5.766 1.49.836 0 1.254-2.234 1.254-6.703Zm28.344-17.303c0-3.333-1.254-6.312-3.762-8.935-2.51-2.622-5.395-3.936-8.652-3.936-3.512 0-6.795 1.591-9.846 4.778-3.053 3.187-4.578 6.519-4.578 9.996 0 2.9 1.42 4.346 4.264 4.346h14.422c5.433-.081 8.152-2.165 8.152-6.249Z" fill="#0D0F0F"/></g></svg>`,
+  G: `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='none'><path d='M100 49.998c0 27.615-22.385 50.002-50.002 50.002-27.613 0-49.998-22.387-49.998-50.002 0-27.613 22.385-49.998 49.998-49.998 27.617 0 50.002 22.385 50.002 49.998z' id='Shape' fill='#A3C095'/><path d='M93.762 56.225c0 1.668-.645 3.164-1.936 4.498-1.289 1.332-2.77 1.998-4.436 1.998-2.662 0-4.623-1.25-5.869-3.748l-5.871-.25c-1.252 0-3.709.543-7.371 1.625-3.914 1.082-6.164 1.957-6.746 2.623-.916.998-1.664 3.332-2.248 6.996-.502 2.998-.748 5.205-.748 6.621 0 2.246.352 3.893 1.061 4.934.709 1.041 2.166 1.916 4.371 2.623 2.205.707 3.561 1.104 4.061 1.187.332 0 .873-.041 1.625-.125h1.498c1.08 0 2.205.17 3.373.5 1.666.5 2.375 1.166 2.125 2-1.168-.166-3.207.084-6.121.75l3.496 1.748c0 1-1.416 1.498-4.246 1.498-.752 0-1.771-.166-3.063-.498-1.291-.336-2.145-.5-2.559-.5h-1.625c-.082.832-.334 2.08-.75 3.746-1.418-.084-3.08-.918-4.996-2.498-1.918-1.58-3.123-2.373-3.621-2.373-.502 0-1.211.793-2.125 2.373-.918 1.58-1.375 2.664-1.375 3.248-1.082-.584-1.996-1.668-2.75-3.248-.332-1.084-.707-2.166-1.121-3.248-.832.084-2.375 1.834-4.621 5.248h-.627c-.166-.252-.795-2-1.873-5.248-2.582-.832-4.996-1.248-7.246-1.248-1.082 0-2.748.25-4.996.748l-3.496-.248c.498-.5 1.955-1.457 4.371-2.873 2.83-1.666 4.996-2.5 6.496-2.5.246 0 .578.043 1 .125.414.086.75.125 1 .125.578 0 1.518-.312 2.809-.938 1.291-.623 2.039-1.186 2.246-1.684.211-.504.316-1.793.316-3.875 0-4.746-1.25-8.285-3.75-10.617-2.168-2.082-5.746-3.58-10.744-4.498-1.332 4.746-5.08 7.123-11.24 7.123-2 0-3.998-1.207-5.996-3.623-1.996-2.416-2.996-4.623-2.996-6.621 0-3.082 1.287-5.621 3.869-7.623-2.08-2.162-3.121-4.369-3.121-6.617 0-2.084.643-3.914 1.936-5.5 1.291-1.578 2.977-2.496 5.059-2.748-.166-2.662.707-4.496 2.623-5.496-.916-.914-1.373-2.537-1.373-4.869 0-2.748.916-5.039 2.748-6.871 1.83-1.832 4.121-2.75 6.869-2.75 3 0 5.457 1.045 7.371 3.125 2.416-8.244 7.621-12.367 15.613-12.367 4.164 0 7.828 1.666 10.994 4.998 1.166 1.248 1.748 1.916 1.748 1.996-1 0-.498-.188 1.5-.561 1.996-.375 3.453-.563 4.373-.563 3.246 0 6.119 1.207 8.619 3.623 2.164 2.166 3.664 4.912 4.498 8.244.58.084 1.498.332 2.748.748 1.83.92 2.748 2.498 2.748 4.748 0 .418-.336 1.209-1 2.373 5.328 2.998 7.994 7.162 7.994 12.492 0 1.498-.582 3.584-1.748 6.247 2.166 1.247 3.246 3.081 3.246 5.495zm-51.467 5.496v-1.623c0-1.914-.936-3.664-2.809-5.246-1.875-1.582-3.77-2.373-5.684-2.373-2.334 0-4.496.541-6.496 1.621 4.413-.248 9.411 2.293 14.989 7.621zm-2.246-15.489c-1.25-1.418-2.332-2.875-3.25-4.373-3.498.916-5.246 1.957-5.246 3.121 1-.08 2.457.105 4.371.564 1.914.459 3.291.688 4.125.688zm7.621-3.873v-5.496c-2-.332-3.211-.5-3.623-.5v1.873l3.623 4.123zm16.238-3.498c-1-.416-2.875-1.25-5.621-2.498v10.742c3.912-2.25 5.785-4.998 5.621-8.244zm6.867 14.741l-2.746-3.373c-1.664 1.167-3.352 2.354-5.061 3.561-1.709 1.207-3.186 2.563-4.432 4.06 3.747-2.002 7.829-3.414 12.239-4.248z' fill='#0D0F0F'/></g></svg>`
+};
 function renderTax(){
-  const tax = state.casts*2;
+  const gen = state.casts*2;   // surcoût de commandement : +2 générique par relance précédente
+  const pips = (gen>0?`<span class="mp gen">${gen}</span>`:'') + MANA_SVG.B + MANA_SVG.G;
   document.getElementById('tax').innerHTML=`
-    <div class="head">
-      <div><div class="tt">👑 Surcoût de relance</div><div class="td">${state.casts} relance(s) · +2 générique par relance</div></div>
-      <div class="taxbig">+${tax}<small> générique</small></div>
-    </div>
-    <div class="row">
-      <div class="lab">Fois lancée depuis la zone de commandement</div>
-      <div class="stepper">
-        <button class="sbtn minus" data-act="bumpTax" data-d="-1">−</button>
-        <div class="sval" data-act="setTax">${state.casts}</div>
-        <button class="sbtn plus" data-act="bumpTax" data-d="1">＋</button>
-      </div>
+    <div class="mcost" title="Coût pour relancer Skullbriar depuis la zone de commandement">${pips}</div>
+    <div class="taxctl">
+      <span class="taxlbl">relancé ${state.casts}×</span>
+      <button class="sbtn minus" data-act="bumpTax" data-d="-1">−</button>
+      <button class="sbtn plus" data-act="bumpTax" data-d="1">＋</button>
     </div>`;
 }
 
 function renderOpps(){
   const el=document.getElementById('opps'); el.innerHTML='';
+  const cd=combatDamage(active());
   state.opponents.forEach(o=>{
-    const pct=Math.min(100, Math.round(o.dmg/21*100));
     const lethal=o.dmg>=21;
     const d=document.createElement('div');
     d.className='opp'+(lethal?' lethal':'');
     d.innerHTML=`
-      <div class="top">
-        <span class="name" data-act="renameOpp" data-id="${o.id}">${esc(o.name)} <span class="edit">✎</span></span>
-        ${lethal?'<span class="lethal-tag">LÉTAL</span>':''}
-        <span class="dmgval">${o.dmg}<span class="of"> / 21</span></span>
-        <button class="del" data-act="delOpp" data-id="${o.id}">✕</button>
-      </div>
-      <div class="bar"><i style="width:${pct}%"></i></div>
-      <div class="ctrls">
-        <div class="stepper">
-          <button class="sbtn minus" data-act="cmd" data-id="${o.id}" data-d="-1">−</button>
-          <div class="sval" data-act="setDmg" data-id="${o.id}">${o.dmg}</div>
-          <button class="sbtn plus" data-act="cmd" data-id="${o.id}" data-d="1">＋</button>
-        </div>
-        <button class="combatbtn" data-act="cmdCombat" data-id="${o.id}">⚔️ +combat (${combatDamage(active())})</button>
-      </div>`;
+      <span class="name" data-act="renameOpp" data-id="${o.id}">${esc(o.name)}</span>
+      <span class="dmgval">${o.dmg}<span class="of">/21</span></span>
+      <button class="sbtn minus" data-act="cmd" data-id="${o.id}" data-d="-1">−</button>
+      <button class="sbtn plus" data-act="cmd" data-id="${o.id}" data-d="1">＋</button>
+      <button class="combatbtn" data-act="cmdCombat" data-id="${o.id}" title="+${cd} dégâts de combat">⚔️</button>
+      <button class="del" data-act="delOpp" data-id="${o.id}">✕</button>`;
     el.appendChild(d);
   });
 }
 
+/* ---------- compteurs : 1 clic = +1, 2 clics = −1, 3 clics = tout retirer ----------
+   On attend ~280ms après le dernier clic pour compter le nombre de clics. */
+let _cntTimer=null, _cntId=null, _cntN=0;
+function _cntFlush(){
+  if(_cntId===null) return;
+  const id=_cntId, n=_cntN;
+  _cntId=null; _cntN=0;
+  if(_cntTimer){ clearTimeout(_cntTimer); _cntTimer=null; }
+  if(n===1) bump(id, 1);                 // 1 clic = ajouter
+  else if(n===2) bump(id, -1);           // 2 clics = retirer 1
+  else { snapshot(); setN(active(), id, 0); save(); render(); }  // 3 clics (ou +) = tout retirer
+}
+function cntTap(id){
+  if(_cntId!==null && _cntId!==id) _cntFlush();   // autre ligne en attente : on l'exécute d'abord
+  _cntId=id; _cntN++;
+  if(_cntTimer) clearTimeout(_cntTimer);
+  _cntTimer=setTimeout(_cntFlush, 280);
+}
+
 /* ============================================================
-   EVENT DELEGATION (corrige le bug + / −)
+   EVENT DELEGATION
    ============================================================ */
 document.addEventListener('click', e=>{
   const t = e.target.closest('[data-act]');
@@ -571,6 +567,7 @@ document.addEventListener('click', e=>{
     case 'bump':       bump(t.dataset.id, parseInt(t.dataset.d,10)); break;
     case 'set':        setCount(t.dataset.id); break;
     case 'add':        bump(t.dataset.id, 1); break;
+    case 'cnt':        cntTap(t.dataset.id); break;
     case 'proliferate':proliferate(); break;
     case 'brawler':    brawler(); break;
     case 'undo':       undo(); break;
