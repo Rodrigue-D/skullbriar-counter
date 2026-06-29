@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Skullbriar">
 <meta name="theme-color" content="#0b0f0a">
-<title>Skullbriar — Compteurs</title>
+<title>Skullbriar — Counters</title>
 <style>
   :root{
     --bg:#0b0f0a; --bg2:#11160f; --card:#161d13; --card2:#1d2618; --card3:#212c1a;
@@ -109,7 +109,8 @@
   .sec-title{display:flex; align-items:center; justify-content:space-between; margin:14px 4px 8px; font-size:11px;
     color:var(--dim); text-transform:uppercase; letter-spacing:2px; font-weight:800;}
   .sec-title .right{display:flex; gap:8px; align-items:center;}
-  .pill{font-size:11px; font-weight:800; padding:5px 10px; border-radius:9px; letter-spacing:.3px; text-transform:none;}
+  .pill{display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:800; padding:5px 10px; border-radius:9px; letter-spacing:.3px; text-transform:none;}
+  .pill svg{height:13px; width:auto; flex-shrink:0;}
   .pill.green{background:rgba(124,201,79,.14); color:var(--green2); border:1px solid var(--line2);}
   .pill.brawler{background:rgba(125,79,163,.18); color:#c98bd6; border:1px solid #4a3550;}
   .pill.act:active{transform:scale(.93);}
@@ -126,6 +127,7 @@
   /* Compteur sur UNE ligne : ligne entière tapable (1 clic = retirer, 2 clics = ajouter), aucun bouton */
   .actrow.cnt{cursor:pointer; min-height:48px; padding:6px 12px; touch-action:manipulation; user-select:none; -webkit-user-select:none;}
   .actrow.cnt:active{transform:scale(.98); filter:brightness(1.12);}
+  .actrow .sbtn{width:38px; height:38px; font-size:21px; border-radius:11px; flex-shrink:0;}
   .actrow .cval{flex-shrink:0; font-size:21px; font-weight:800; font-variant-numeric:tabular-nums; color:var(--green2); min-width:20px; text-align:right;}
   .actrow.minus11 .cval{color:var(--red);}
   .actrow.wide{grid-column:span 2;}
@@ -206,12 +208,12 @@
       <span class="skull">💀</span>
       <div>
         <h1>Skullbriar</h1>
-        <div class="sub">Compteurs &amp; dégâts de commandant</div>
+        <div class="sub">Counters &amp; commander damage</div>
       </div>
     </div>
     <div class="topbtns">
-      <button class="iconbtn wide" id="undoBtn" data-act="undo" title="Annuler">↺<span class="bl">Annuler</span></button>
-      <button class="iconbtn wide danger" data-act="resetAll" title="Tout réinitialiser">⟳<span class="bl">Reset</span></button>
+      <button class="iconbtn wide" id="undoBtn" data-act="undo" title="Undo">↺</button>
+      <button class="iconbtn wide danger" data-act="resetAll" title="Reset everything">⟳<span class="bl">Reset</span></button>
     </div>
   </div>
 
@@ -220,30 +222,30 @@
   <div class="hero" id="hero"></div>
 
   <div class="sec-title">
-    <span>Compteurs sur la carte</span>
+    <span>Counters on the card</span>
     <div class="right">
-      <button class="pill green act" data-act="proliferate" id="prolifBtn">✦ Proliférer</button>
-      <button class="pill brawler act" data-act="brawler" id="brawlerBtn" title="+4 +1/+1, Vol, Vigilance, Piétinement, Lien de vie">🥊 Brawler</button>
+      <button class="pill green act" data-act="proliferate" id="prolifBtn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 32"> <path fill="currentColor" d="M14.306 20.953c0.304 0.718 0.422 1.481 0.444 2.255 0 3.638-3.302 6.587-7.375 6.587s-7.375-2.949-7.375-6.587c0.001-0.556 0.079-1.111 0.232-1.646 0.059-0.207 0.141-0.406 0.212-0.609 1.247 2.809 3.923 4.264 6.931 4.332 2.453-0.016 4.905-1.109 6.307-3.172 0.323-0.475 0.379-0.642 0.623-1.16zM14.306 13.434c-0.244 0.518-0.301 0.685-0.623 1.16-1.402 2.062-3.855 3.156-6.307 3.172-3.008-0.068-5.684-1.523-6.931-4.332-0.071 0.203-0.153 0.402-0.212 0.609-0.153 0.535-0.232 1.090-0.232 1.646 0 3.638 3.302 6.587 7.375 6.587s7.375-2.949 7.375-6.587c-0.022-0.774-0.14-1.537-0.444-2.255zM7.375 2.204c-0.232 0.010-0.486 0.052-0.646 0.239h-0.001l-0.001 0.002-0.006 0.006 0.003-0c-0.117 0.312-0.253 0.615-0.399 0.914-1.313 2.801-3.67 3.548-6.184 3.715-0.074 0.649-0.056 0.357-0.070 0.875 0.217 3.956 3.469 6.505 7.303 6.586v0l0.352-0.012c0.616-0.060 0.774-0.055 1.378-0.192 3.043-0.691 5.479-3.181 5.573-6.382-0.015-0.519 0.003-0.227-0.070-0.875-2.513-0.167-4.87-0.915-6.184-3.715-0.143-0.305-0.294-0.604-0.403-0.923l-0.003-0.004c-0.112-0.139-0.358-0.235-0.643-0.235z"></path> </svg> Proliferate</button>
+      <button class="pill brawler act" data-act="brawler" id="brawlerBtn" title="+4 +1/+1, Flying, Vigilance, Trample, Lifelink"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 32"> <path fill="currentColor" d="M15.438 0.375l0.403 0.005c8.529 0.32 15.114 7.090 15.222 15.62 0 8.629-6.996 15.625-15.625 15.625s-15.625-6.996-15.625-15.625c0-8.629 6.996-15.625 15.625-15.625v0zM14.016 1.026v0c-7.269 0.684-12.831 6.444-13.562 13.645 0.415-0.615 1.135-0.941 1.861-0.96l0.118 0.003c1.223 0.083 2.14 1.068 2.171 2.286 0 1.264-1.025 2.289-2.289 2.289-0.723-0.008-1.45-0.351-1.861-0.96 0.718 7.437 6.383 12.917 13.761 13.666-0.671-0.425-1.046-1.148-1.066-1.933 0-1.264 1.025-2.289 2.289-2.289s2.289 1.025 2.289 2.289c0.002 0.797-0.416 1.494-1.066 1.933 7.288-0.651 13.012-6.29 13.752-13.573-0.435 0.556-1.093 0.849-1.791 0.867-1.264 0-2.289-1.025-2.289-2.289s1.025-2.289 2.289-2.289c0.705-0.001 1.346 0.328 1.791 0.867-0.696-7.225-6.403-12.748-13.553-13.553 0.559 0.436 0.832 1.096 0.867 1.791 0 1.264-1.025 2.289-2.289 2.289s-2.289-1.025-2.289-2.289c-0.001-0.705 0.328-1.346 0.867-1.791zM18.518 2.363c5.126 1.078 9.503 5.409 10.556 10.556-0.344-0.035-0.194-0.027-0.451-0.034-1.719 0-3.113 1.394-3.113 3.113s1.394 3.113 3.113 3.113c0.258-0.006 0.107 0.001 0.451-0.034-1.080 5.141-5.423 9.506-10.579 10.561 0.047-0.189 0.052-0.385 0.057-0.578 0-1.719-1.394-3.113-3.113-3.113s-3.113 1.394-3.113 3.113c-0.001 0.194 0.018 0.388 0.057 0.578-5.143-1.076-9.525-5.408-10.582-10.571 0.168 0.038 0.343 0.040 0.515 0.044 1.719 0 3.113-1.394 3.113-3.113s-1.394-3.113-3.113-3.113c-0.172 0.002-0.346 0.010-0.515 0.044 1.077-5.13 5.406-9.512 10.558-10.566-0.035 0.344-0.027 0.194-0.034 0.451 0 1.719 1.394 3.113 3.113 3.113s3.113-1.394 3.113-3.113c-0.006-0.258 0.001-0.107-0.034-0.451v0zM14.941 16.964c-0.775 0.008-1.703 0.019-1.399 1.078 0.417 1.396 0.688 2.542 0.73 5.019 0.001 0.043-0.016 0.103 0.020 0.127 2.583 1.745 4.833 2.323 7.53 3.061 0.029 0.008 0.041-0.013 0.069-0.004 0.003-0.053 0.018-0.074 0.024-0.125 0.117-1 0.117-1.563 0.023-2.578-0.004-0.047-0.003-0.139 0-0.188-0.046-0.014-0.159-0.074-0.203-0.094-0.672-0.297-2.508-1.253-3.964-0.573-0.462-0.16-0.709-0.063-1.459-0.392-0.030-0.013-0.088-0.062-0.089-0.115-0.002-0.094 0.008-0.187 0.011-0.28 0.183-2.984-0.102-3.227-0.109-4.9-0.073 0-0.146 0.003-0.219 0.001-0.167-0.004-0.805-0.031-0.965-0.038zM14.843 6.625c-1.817 0.008-3.316 0.38-4.839 1.406-2.299 1.76-3.332 4.040-3.213 7.246 0.104 2.792 1.854 4.542 3.854 5.729 0.070 0.041 0.015-0.167 0.021-0.249 0.125-1.709 0.504-3.85 2.018-5.145 0.044-0.038 0.070-0.092 0.107-0.138 1.543 0.013 3.234 0.44 4.469-0.729 0 0 0.125-0.141 0.125-0.141 0.859-0.906 0.619-2.265 0.442-3.395 0.038 0.037 0.071 0.077 0.112 0.108 0.711 0.535 1.179 1.132 1.791 2.013 0.018 0.026 0.094 0.055 0.066 0.070-2.613 1.403-3.169 3.447-2.742 5.903 0 0 0.018 0.141 0.018 0.141 1.011 0.284 1.741 0.472 1.956 1.927 0.005 0.035 0.010 0.071 0.013 0.107 1.222 0.302 3.532 1.101 3.667 0.75 0.542-1.417 0.547-2.514-0.083-3.854 0.197-0.545 0.847-0.929 0.688-1.488-0.104-0.366-0.208-0.553-0.563-0.97-0.106-0.125-0.292-0.417 0.024-1.404 0.018-0.057 0.004-0.091 0.002-0.16-0.247-4.478-3.504-7.513-7.933-7.728zM20.477 14.634c0.805 0.013 1.094 0.283 1.273 1.074 0.16 0.819-0.726 1.948-1.5 1.771-1-0.229-1.375-0.75-1.354-1.5 0.023-0.839 0.688-1.25 1.438-1.333l0.144-0.012zM15.438 27.597v0c-0.809 0-1.465 0.656-1.465 1.465s0.656 1.465 1.465 1.465 1.465-0.656 1.465-1.465c0-0.809-0.656-1.465-1.465-1.465zM2.315 14.535l-0.15 0.008c-0.764 0.111-1.276 0.691-1.315 1.457 0 0.809 0.656 1.465 1.465 1.465s1.465-0.656 1.465-1.465c-0.039-0.767-0.551-1.346-1.315-1.457l-0.15-0.008zM28.621 14.535v0c-0.809 0-1.465 0.656-1.465 1.465s0.656 1.465 1.465 1.465c0.809 0 1.465-0.656 1.465-1.465s-0.656-1.465-1.465-1.465zM15.438 1.352v0c-0.809 0-1.465 0.656-1.465 1.465s0.656 1.465 1.465 1.465 1.465-0.656 1.465-1.465c0-0.809-0.656-1.465-1.465-1.465z"></path> </svg> Brawler</button>
     </div>
   </div>
   <div class="actlist" id="actlist"></div>
 
-  <div class="sec-title"><span>Ajouter un compteur</span></div>
+  <div class="sec-title"><span>Add a counter</span></div>
   <div class="palette" id="palette"></div>
 
   <div class="sec-title">
-    <span>Dégâts de commandant <span style="color:var(--dim2)">· 21 = létal</span></span>
+    <span>Commander damage</span>
   </div>
   <div id="opps"></div>
-  <button class="addopp" data-act="addOpp">＋ Ajouter un adversaire</button>
+  <button class="addopp" data-act="addOpp">＋ Add an opponent</button>
 
   <div class="footer">
-    Sauvegarde automatique sur l'appareil.
+    Auto-saved on this device.
   </div>
 </div>
 
 <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
-<div class="cardview" id="cardview"><img id="cardviewImg" alt="Skullbriar, the Walking Grave"><button class="close" data-act="closeCard">Fermer</button></div>
+<div class="cardview" id="cardview"><img id="cardviewImg" alt="Skullbriar, the Walking Grave"><button class="close" data-act="closeCard">Close</button></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -300,7 +302,7 @@ function defaultState(){
     creatures:[ newCreature('Skullbriar', 1, 1, true) ],
     activeId:null,
     casts:0,
-    opponents:[ newOpp('Adversaire 1'), newOpp('Adversaire 2'), newOpp('Adversaire 3') ],
+    opponents:[ newOpp('Opponent 1'), newOpp('Opponent 2'), newOpp('Opponent 3') ],
     customTypes:[],
     seq:1
   };
@@ -340,9 +342,9 @@ function snapshot(){
   if(history.length>50) history.shift();
 }
 function undo(){
-  if(!history.length){ toast('Rien à annuler'); return; }
+  if(!history.length){ toast('Nothing to undo'); return; }
   state = JSON.parse(history.pop());
-  save(); render(); toast('Annulé');
+  save(); render(); toast('Undone');
 }
 
 /* ---------- helpers ---------- */
@@ -385,7 +387,7 @@ function bump(id, d){
 function setCount(id){
   const c = active();
   const cur = getN(c,id);
-  const v = prompt(typeDef(id).n + ' — nombre de compteurs :', cur);
+  const v = prompt(typeDef(id).n + ' — number of counters:', cur);
   if(v===null) return;
   const n = parseInt(v,10);
   if(isNaN(n)) return;
@@ -394,11 +396,11 @@ function setCount(id){
 function proliferate(){
   const c = active();
   const ids = Object.keys(c.counts).filter(k=>c.counts[k]>0);
-  if(!ids.length){ toast('Aucun compteur à proliférer'); return; }
+  if(!ids.length){ toast('No counter to proliferate'); return; }
   snapshot();
   ids.forEach(k=> c.counts[k]+=1);
   annihilate(c);
-  save(); render(); toast('Proliféré : +1 sur '+ids.length+' type(s)');
+  save(); render(); toast('Proliferated: +1 on '+ids.length+' type(s)');
 }
 // Préréglage « Brawler » : +4 compteurs +1/+1 et accorde Vol, Vigilance,
 // Piétinement et Lien de vie (ajout d'1 compteur sur le mot-clé s'il est absent).
@@ -409,7 +411,7 @@ function brawler(){
   ['flying','vigilance','trample','lifelink'].forEach(id=>{ if(getN(c,id)<1) setN(c,id,1); });
   annihilate(c);
   save(); render();
-  toast('Brawler : +4 +1/+1 · Vol · Vigilance · Piétinement · Lien de vie');
+  toast('Brawler: +4 +1/+1 · Flying · Vigilance · Trample · Lifelink');
 }
 function cmdDmg(oid, d){
   snapshot();
@@ -418,11 +420,11 @@ function cmdDmg(oid, d){
 }
 function cmdDmgCombat(oid){
   const dmg = combatDamage(active());
-  if(dmg<=0){ toast('0 dégât de combat'); return; }
+  if(dmg<=0){ toast('0 combat damage'); return; }
   snapshot();
   const o = state.opponents.find(x=>x.id===oid); if(!o) return;
   o.dmg += dmg; save(); render();
-  toast('+'+dmg+' dégât(s) → '+o.name);
+  toast('+'+dmg+' damage → '+o.name);
 }
 
 /* ============================================================
@@ -462,9 +464,9 @@ function renderHero(){
     <div class="pt">
       <span class="num ${cls}">${p}</span><span class="slash">/</span><span class="num ${cls}">${t}</span>
     </div>
-    <div class="pt-lbl">Force / Endurance</div>
+    <div class="pt-lbl">Power / Toughness</div>
     <div class="p1p1">
-      <div class="lbl">＋1/＋1 <small>tape le nombre pour saisir</small></div>
+      <div class="lbl">＋1/＋1</div>
       <div class="stepper">
         <button class="sbtn minus" data-act="bump" data-id="p1p1" data-d="-1">−</button>
         <div class="sval" data-act="set" data-id="p1p1">${p11}</div>
@@ -479,21 +481,23 @@ function renderActive(){
   // tous les types actifs sauf p1p1 (déjà dans le hero)
   const types = allTypes().filter(t=> t.id!=='p1p1' && getN(c,t.id)>0);
   if(!types.length){
-    el.innerHTML = `<div class="empty">Aucun autre compteur. Ajoute-en ci-dessous 👇</div>`;
+    el.innerHTML = `<div class="empty">No other counter. Add one below 👇</div>`;
     document.getElementById('prolifBtn').style.opacity = getN(c,'p1p1')>0 ? '1':'.4';
     return;
   }
   document.getElementById('prolifBtn').style.opacity='1';
-  // ordre : m1m1 d'abord, puis le reste par valeur décroissante
-  types.sort((a,b)=> (a.id==='m1m1'?-1:b.id==='m1m1'?1: getN(c,b.id)-getN(c,a.id)));
+  // ordre alphabétique fixe (indépendant de la valeur → la liste ne se réordonne plus quand on change les nombres)
+  types.sort((a,b)=> a.n.localeCompare(b.n, 'fr', {numeric:true}));
   // tous les marqueurs sont des compteurs numériques : une créature peut en porter
   // plusieurs du même type (compte pour la prolifération / le déplacement de marqueurs).
   types.forEach(t=>{
     const v=getN(c,t.id);
     const row=document.createElement('div');
     row.className='actrow cnt'+(t.id==='m1m1'?' minus11':'');
-    row.dataset.act='cnt'; row.dataset.id=t.id;
-    row.innerHTML=`<div class="lab"><span class="emoji">${t.e}</span><span class="nm">${esc(t.n)}</span></div><span class="cval">${v}</span>`;
+    row.dataset.act='bump'; row.dataset.id=t.id; row.dataset.d='1';   // tap sur la ligne = +1
+    row.innerHTML=`<div class="lab"><span class="emoji">${t.e}</span><span class="nm">${esc(t.n)}</span></div>`+
+      `<button class="sbtn minus" data-act="bump" data-id="${t.id}" data-d="-1">−</button>`+
+      `<span class="cval">${v}</span>`;
     el.appendChild(row);
   });
 }
@@ -502,7 +506,8 @@ function renderPalette(){
   const c = active();
   const el=document.getElementById('palette'); el.innerHTML='';
   // types disponibles = ceux à 0 (sauf p1p1 dans hero)
-  const types = allTypes().filter(t=> t.id!=='p1p1' && getN(c,t.id)===0);
+  const types = allTypes().filter(t=> t.id!=='p1p1' && getN(c,t.id)===0)
+    .sort((a,b)=> a.n.localeCompare(b.n, 'fr', {numeric:true}));
   types.forEach(t=>{
     const b=document.createElement('button');
     b.className='pchip'+(t.kind==='custom'?' custom':'');
@@ -512,7 +517,7 @@ function renderPalette(){
   });
   const add=document.createElement('button');
   add.className='pchip addnew'; add.dataset.act='addType';
-  add.innerHTML='＋ Compteur personnalisé';
+  add.innerHTML='＋ Custom counter';
   el.appendChild(add);
 }
 
@@ -525,9 +530,9 @@ function renderTax(){
   const gen = state.casts*2;   // surcoût de commandement : +2 générique par relance précédente
   const pips = (gen>0?`<span class="mp gen">${gen}</span>`:'') + MANA_SVG.B + MANA_SVG.G;
   document.getElementById('tax').innerHTML=`
-    <div class="mcost" title="Coût pour relancer Skullbriar depuis la zone de commandement">${pips}</div>
+    <div class="mcost" title="Cost to recast Skullbriar from the command zone">${pips}</div>
     <div class="taxctl">
-      <span class="taxlbl">relancé ${state.casts}×</span>
+      <span class="taxlbl">recast ${state.casts}×</span>
       <button class="sbtn minus" data-act="bumpTax" data-d="-1">−</button>
       <button class="sbtn plus" data-act="bumpTax" data-d="1">＋</button>
     </div>`;
@@ -545,30 +550,12 @@ function renderOpps(){
       <span class="dmgval">${o.dmg}<span class="of">/21</span></span>
       <button class="sbtn minus" data-act="cmd" data-id="${o.id}" data-d="-1">−</button>
       <button class="sbtn plus" data-act="cmd" data-id="${o.id}" data-d="1">＋</button>
-      <button class="combatbtn" data-act="cmdCombat" data-id="${o.id}" title="+${cd} dégâts de combat">⚔️</button>
+      <button class="combatbtn" data-act="cmdCombat" data-id="${o.id}" title="+${cd} combat damage">⚔️</button>
       <button class="del" data-act="delOpp" data-id="${o.id}">✕</button>`;
     el.appendChild(d);
   });
 }
 
-/* ---------- compteurs : 1 clic = +1, 2 clics = −1, 3 clics = tout retirer ----------
-   On attend ~280ms après le dernier clic pour compter le nombre de clics. */
-let _cntTimer=null, _cntId=null, _cntN=0;
-function _cntFlush(){
-  if(_cntId===null) return;
-  const id=_cntId, n=_cntN;
-  _cntId=null; _cntN=0;
-  if(_cntTimer){ clearTimeout(_cntTimer); _cntTimer=null; }
-  if(n===1) bump(id, 1);                 // 1 clic = ajouter
-  else if(n===2) bump(id, -1);           // 2 clics = retirer 1
-  else { snapshot(); setN(active(), id, 0); save(); render(); }  // 3 clics (ou +) = tout retirer
-}
-function cntTap(id){
-  if(_cntId!==null && _cntId!==id) _cntFlush();   // autre ligne en attente : on l'exécute d'abord
-  _cntId=id; _cntN++;
-  if(_cntTimer) clearTimeout(_cntTimer);
-  _cntTimer=setTimeout(_cntFlush, 280);
-}
 
 /* ============================================================
    EVENT DELEGATION
@@ -581,7 +568,6 @@ document.addEventListener('click', e=>{
     case 'bump':       bump(t.dataset.id, parseInt(t.dataset.d,10)); break;
     case 'set':        setCount(t.dataset.id); break;
     case 'add':        bump(t.dataset.id, 1); break;
-    case 'cnt':        cntTap(t.dataset.id); break;
     case 'proliferate':proliferate(); break;
     case 'brawler':    brawler(); break;
     case 'undo':       undo(); break;
@@ -590,13 +576,13 @@ document.addEventListener('click', e=>{
     case 'editCreature':openCreatureModal(active()); break;
     case 'addType':    openTypeModal(); break;
     case 'bumpTax':    snapshot(); state.casts=Math.max(0,state.casts+parseInt(t.dataset.d,10)); save(); render(); break;
-    case 'setTax':   { const v=prompt('Nombre de relances :',state.casts); if(v!==null&&!isNaN(parseInt(v,10))){snapshot();state.casts=Math.max(0,parseInt(v,10));save();render();} break; }
+    case 'setTax':   { const v=prompt('Number of recasts:',state.casts); if(v!==null&&!isNaN(parseInt(v,10))){snapshot();state.casts=Math.max(0,parseInt(v,10));save();render();} break; }
     case 'cmd':        cmdDmg(t.dataset.id, parseInt(t.dataset.d,10)); break;
     case 'cmdCombat':  cmdDmgCombat(t.dataset.id); break;
-    case 'setDmg':   { const o=state.opponents.find(x=>x.id===t.dataset.id); if(o){const v=prompt('Dégâts de commandant :',o.dmg); if(v!==null&&!isNaN(parseInt(v,10))){snapshot();o.dmg=Math.max(0,parseInt(v,10));save();render();}} break; }
-    case 'renameOpp':{ const o=state.opponents.find(x=>x.id===t.dataset.id); if(o){const v=prompt('Nom de l\'adversaire :',o.name); if(v!==null&&v.trim()){snapshot();o.name=v.trim();save();render();}} break; }
-    case 'delOpp':   { if(state.opponents.length<=1){toast('Garde au moins un adversaire');break;} snapshot(); state.opponents=state.opponents.filter(x=>x.id!==t.dataset.id); save(); render(); break; }
-    case 'addOpp':     snapshot(); state.opponents.push(newOpp('Adversaire '+(state.opponents.length+1))); save(); render(); break;
+    case 'setDmg':   { const o=state.opponents.find(x=>x.id===t.dataset.id); if(o){const v=prompt('Commander damage:',o.dmg); if(v!==null&&!isNaN(parseInt(v,10))){snapshot();o.dmg=Math.max(0,parseInt(v,10));save();render();}} break; }
+    case 'renameOpp':{ const o=state.opponents.find(x=>x.id===t.dataset.id); if(o){const v=prompt('Opponent name:',o.name); if(v!==null&&v.trim()){snapshot();o.name=v.trim();save();render();}} break; }
+    case 'delOpp':   { if(state.opponents.length<=1){toast('Keep at least one opponent');break;} snapshot(); state.opponents=state.opponents.filter(x=>x.id!==t.dataset.id); save(); render(); break; }
+    case 'addOpp':     snapshot(); state.opponents.push(newOpp('Opponent '+(state.opponents.length+1))); save(); render(); break;
     case 'resetAll':   resetAll(); break;
     case 'closeModal': closeModal(); break;
     case 'viewCard':   openCard(); break;
@@ -614,51 +600,48 @@ modal.addEventListener('click', e=>{ if(e.target===modal) closeModal(); });
 
 function resetAll(){
   openModal(`
-    <h3>Réinitialiser</h3>
-    <p>Que veux-tu remettre à zéro ?</p>
+    <h3>Reset</h3>
     <div class="acts" style="flex-direction:column;">
-      <button class="ok" id="reset-counters">🔄 Seulement les compteurs<br><small style="font-weight:600;opacity:.85;">garde les dégâts de commandant infligés</small></button>
-      <button class="danger" id="reset-all">⟳ Tout réinitialiser<br><small style="font-weight:600;opacity:.85;">nouvelle partie — efface tout</small></button>
-      <button class="cancel" data-act="closeModal">Annuler</button>
+      <button class="ok" id="reset-counters">Counters only</button>
+      <button class="danger" id="reset-all">New game</button>
     </div>
   `);
   // Compteurs seuls : vide les compteurs de toutes les créatures, conserve adversaires/dégâts, taxe et créatures.
   document.getElementById('reset-counters').onclick=()=>{
     snapshot();
     state.creatures.forEach(cr=> cr.counts={});
-    save(); render(); closeModal(); toast('Compteurs remis à zéro');
+    save(); render(); closeModal(); toast('Counters reset');
   };
   // Tout : nouvelle partie complète.
   document.getElementById('reset-all').onclick=()=>{
-    history=[]; state=defaultState(); state.activeId=state.creatures[0].id; save(); render(); closeModal(); toast('Nouvelle partie');
+    snapshot(); state=defaultState(); state.activeId=state.creatures[0].id; save(); render(); closeModal(); toast('New game');
   };
 }
 
 function openCreatureModal(cr){
   const isNew=!cr;
   openModal(`
-    <h3>${isNew?'Nouvelle créature':'Modifier la créature'}</h3>
-    <p>${isNew?'Pour suivre une autre créature à compteurs (jeton, cible de The Ozolith…).':'Skullbriar a une base de 1/1.'}</p>
-    <div class="field"><label>Nom</label><input id="cr-name" type="text" value="${isNew?'':esc(cr.name)}" placeholder="Nom de la créature"></div>
-    <div class="field"><label>Force / Endurance de base</label>
+    <h3>${isNew?'New creature':'Edit creature'}</h3>
+    <p>${isNew?'To track another creature with counters (token, The Ozolith target…).':'Skullbriar has a base of 1/1.'}</p>
+    <div class="field"><label>Name</label><input id="cr-name" type="text" value="${isNew?'':esc(cr.name)}" placeholder="Creature name"></div>
+    <div class="field"><label>Base power / toughness</label>
       <div class="pair"><input id="cr-p" type="number" inputmode="numeric" value="${isNew?1:cr.baseP}"><input id="cr-t" type="number" inputmode="numeric" value="${isNew?1:cr.baseT}"></div>
     </div>
     <div class="acts">
-      <button class="cancel" data-act="closeModal">Annuler</button>
-      ${(!isNew && !cr.cmd)?'<button class="danger" id="cr-del">Supprimer</button>':''}
-      <button class="ok" id="cr-ok">${isNew?'Créer':'Enregistrer'}</button>
+      ${(!isNew && !cr.cmd)?'<button class="danger" id="cr-del">Delete</button>':''}
+      <button class="ok" id="cr-ok">${isNew?'Create':'Save'}</button>
     </div>
   `);
   if(!isNew && !cr.cmd){
     document.getElementById('cr-del').onclick=()=>{
-      if(state.creatures.length<=1){ toast('Au moins une créature requise'); return; }
-      if(confirm('Supprimer « '+cr.name+' » ?')){
+      if(state.creatures.length<=1){ toast('At least one creature required'); return; }
+      if(confirm('Delete "'+cr.name+'"?')){
         snapshot(); state.creatures=state.creatures.filter(x=>x.id!==cr.id); state.activeId=state.creatures[0].id; save(); render(); closeModal();
       }
     };
   }
   document.getElementById('cr-ok').onclick=()=>{
-    const name=(document.getElementById('cr-name').value||'').trim()||'Créature';
+    const name=(document.getElementById('cr-name').value||'').trim()||'Creature';
     const p=parseInt(document.getElementById('cr-p').value,10); const t=parseInt(document.getElementById('cr-t').value,10);
     snapshot();
     if(isNew){ const c=newCreature(name, isNaN(p)?1:p, isNaN(t)?1:t, false); state.creatures.push(c); state.activeId=c.id; }
@@ -671,15 +654,14 @@ let pickedEmoji='✨';
 function openTypeModal(){
   pickedEmoji='✨';
   openModal(`
-    <h3>Compteur personnalisé</h3>
-    <p>Pour tout compteur non listé (Infect, Wither, Charge, Oil, Page…).</p>
-    <div class="field"><label>Nom du compteur</label><input id="ty-name" type="text" placeholder="Ex : Infect" autocomplete="off"></div>
-    <div class="field"><label>Icône</label>
+    <h3>Custom counter</h3>
+    <p>For any unlisted counter (Infect, Wither, Charge, Oil, Page…).</p>
+    <div class="field"><label>Counter name</label><input id="ty-name" type="text" placeholder="e.g. Infect" autocomplete="off"></div>
+    <div class="field"><label>Icon</label>
       <div class="emojipick" id="ty-emoji">${EMOJI_CHOICES.map(e=>`<button data-e="${e}"${e===pickedEmoji?' class="sel"':''}>${e}</button>`).join('')}</div>
     </div>
     <div class="acts">
-      <button class="cancel" data-act="closeModal">Annuler</button>
-      <button class="ok" id="ty-ok">Ajouter</button>
+      <button class="ok" id="ty-ok">Add</button>
     </div>
   `);
   document.getElementById('ty-emoji').addEventListener('click', e=>{
@@ -694,7 +676,7 @@ function openTypeModal(){
     const id='cu_'+(state.seq++);
     state.customTypes.push({id, n, e:pickedEmoji});
     active().counts[id]=1;
-    save(); render(); closeModal(); toast('Compteur « '+n+' » ajouté');
+    save(); render(); closeModal(); toast('Counter "'+n+'" added');
   };
   document.getElementById('ty-ok').onclick=ok;
   inp.addEventListener('keydown', e=>{ if(e.key==='Enter') ok(); });
