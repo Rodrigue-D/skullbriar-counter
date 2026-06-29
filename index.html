@@ -214,8 +214,6 @@
     </div>
   </div>
 
-  <div class="tabs" id="tabs"></div>
-
   <div class="tax" id="tax"></div>
 
   <div class="hero" id="hero"></div>
@@ -420,7 +418,7 @@ function render(){
 }
 
 function renderTabs(){
-  const el = document.getElementById('tabs'); el.innerHTML='';
+  const el = document.getElementById('tabs'); if(!el) return; el.innerHTML='';
   state.creatures.forEach(c=>{
     const b = document.createElement('button');
     b.className='tab'+(c.id===state.activeId?' active':'');
@@ -700,6 +698,22 @@ function toast(msg){
   const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
   clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'),1600);
 }
+
+/* ---------- empêche la mise en veille de l'écran (Screen Wake Lock) ----------
+   Nécessite HTTPS + iOS 16.4+ ; dégradation silencieuse sinon. */
+let _wakeLock=null;
+async function requestWakeLock(){
+  if(!('wakeLock' in navigator)) return;
+  try{
+    _wakeLock = await navigator.wakeLock.request('screen');
+    _wakeLock.addEventListener('release', ()=>{ _wakeLock=null; });
+  }catch(e){ /* refusé (onglet caché, batterie faible…) — on réessaiera */ }
+}
+// Le verrou est relâché en arrière-plan : on le ré-acquiert au retour à l'écran.
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible') requestWakeLock(); });
+// iOS exige souvent un geste : on (re)demande aussi au premier contact.
+document.addEventListener('click', ()=>{ if(!_wakeLock) requestWakeLock(); });
+requestWakeLock();
 
 /* ---------- boot ---------- */
 state = load();
