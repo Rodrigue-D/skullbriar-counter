@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Skullbriar">
 <meta name="theme-color" content="#0b0f0a">
+<meta name="darkreader-lock">
 <title>Skullbriar — Counters</title>
 <style>
   :root{
@@ -66,6 +67,7 @@
     background:rgba(8,12,7,.55); border:1px solid rgba(255,255,255,.18); color:#fff; font-size:16px;
     display:flex; align-items:center; justify-content:center; backdrop-filter:blur(2px);}
   .heroart .zoom:active{transform:scale(.9);}
+  .heroart .zoom svg{width:20px; height:20px;}
   .hero.hasart .crname{margin-top:-4px;}
 
   /* vue plein écran de la carte */
@@ -73,7 +75,18 @@
     z-index:300; padding:24px; flex-direction:column; gap:14px;}
   .cardview.show{display:flex; animation:fadein .18s ease;}
   @keyframes fadein{from{opacity:0;}to{opacity:1;}}
-  .cardview img{max-width:100%; max-height:78vh; border-radius:18px; box-shadow:0 12px 50px rgba(0,0,0,.7);}
+  .cardview .livecard{position:relative; container-type:size; width:min(92vw, 59vh); aspect-ratio:488/680; border-radius:14px; box-shadow:0 12px 50px rgba(0,0,0,.7);}
+  .cardview img{width:100%; height:100%; display:block; border-radius:14px;}
+  .ov{position:absolute; box-sizing:border-box; color:#191920;}
+  /* COÛT : seulement l'incolore (surcoût), à gauche des symboles {B}{G} déjà imprimés */
+  .ov-cost{top:5.6%; right:17.8%; display:flex;}
+  .ov-cost .mp{width:4.6cqw; height:4.6cqw; min-width:0; font-size:2.9cqw; line-height:1; box-shadow:0 0 0 0.16cqw rgba(36,30,22,.9), 0.12cqw 0.4cqw 0.6cqw rgba(0,0,0,.65);}
+  .ov-cost svg{height:5.2cqw; width:auto; display:block;}
+  /* BOÎTE DE TEXTE : masque gris-lavande (couleur réelle de l'encart) puis Haste + compteurs */
+  .ov-text{left:8%; right:8%; top:63%; height:28.2%; background:linear-gradient(180deg,#e6e3ea,#d6d4dc); border-radius:2px; padding:2.5% 3.5%; font-family:"Iowan Old Style","Hoefler Text",Palatino,"Palatino Linotype",Georgia,"Times New Roman",serif; color:#191920; font-size:4.2cqw; line-height:1.3; overflow:hidden;}
+  .ov-text .lc-eff{font-size:3.1cqw; line-height:1.22; margin-top:3.8%;}
+  /* FORCE / ENDURANCE : masque (couleur réelle) puis valeur */
+  .ov-pt{right:5.5%; bottom:4.6%; min-width:18%; height:7.2%; background:linear-gradient(180deg,#e3d39d,#b29b61); box-shadow:inset 0 0 0 1px rgba(78,60,20,.45); border-radius:2.6cqw; color:#191920; display:flex; align-items:center; justify-content:center; line-height:1; font-family:Georgia,serif; font-weight:700; font-size:5.7cqw; padding:0 2cqw;}
   .cardview .close{padding:12px 26px; border-radius:14px; background:var(--card2); border:1px solid var(--line2); color:var(--txt); font-size:15px; font-weight:700;}
 
   .hero .crname{text-align:center; font-size:12px; color:var(--dim); font-weight:700; letter-spacing:.4px; margin-bottom:1px;}
@@ -245,7 +258,15 @@
 </div>
 
 <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
-<div class="cardview" id="cardview"><img id="cardviewImg" alt="Skullbriar, the Walking Grave"><button class="close" data-act="closeCard">Close</button></div>
+<div class="cardview" id="cardview">
+  <div class="livecard">
+    <img id="cardviewImg" alt="Skullbriar, the Walking Grave">
+    <div class="ov ov-cost" id="lc-cost"></div>
+    <div class="ov ov-text" id="lc-text"></div>
+    <div class="ov ov-pt" id="lc-pt"></div>
+  </div>
+  <button class="close" data-act="closeCard">Close</button>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -459,7 +480,7 @@ function renderHero(){
   const heroEl = document.getElementById('hero');
   heroEl.classList.toggle('hasart', showArt);
   heroEl.innerHTML = `
-    ${showArt?`<div class="heroart" style="background-image:url('${CARD_ART}')"><button class="zoom" data-act="viewCard">🔍</button></div>`:''}
+    ${showArt?`<div class="heroart" style="background-image:url('${CARD_ART}')"><button class="zoom" data-act="viewCard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H4v4"/><path d="M4 4l6 6"/><path d="M16 4h4v4"/><path d="M20 4l-6 6"/><path d="M8 20H4v-4"/><path d="M4 20l6-6"/><path d="M16 20h4v-4"/><path d="M20 20l-6-6"/></svg></button></div>`:''}
     <div class="crname">${esc(c.name)} <span class="edit" data-act="editCreature">✎ base ${bp}/${bt}</span></div>
     <div class="pt">
       <span class="num ${cls}">${p}</span><span class="slash">/</span><span class="num ${cls}">${t}</span>
@@ -683,9 +704,21 @@ function openTypeModal(){
 }
 
 function openCard(){
-  const cv=document.getElementById('cardview');
+  const c=active();
   document.getElementById('cardviewImg').src = (CARD_FULL.indexOf('data:')===0) ? CARD_FULL : CARD_ART;
-  cv.classList.add('show');
+  // coût de relance à jour : générique (2 × relances) + noir + vert
+  const tax=state.casts*2;   // surcoût générique uniquement ; rien si aucune relance (le {B}{G} est déjà imprimé)
+  document.getElementById('lc-cost').innerHTML = tax>0 ? `<span class="mp gen">${tax}</span>` : '';
+  // force / endurance à jour
+  document.getElementById('lc-pt').textContent = power(c)+'/'+tough(c);
+  // boîte de texte = Haste + compteurs actifs (ordre alphabétique)
+  const items=allTypes().filter(t=>t.id!=='p1p1' && getN(c,t.id)>0).sort((a,b)=>a.n.localeCompare(b.n,'en')).map(t=>{
+    const v=getN(c,t.id); return v>1 ? esc(t.n)+' ×'+v : esc(t.n);
+  });
+  const kw = ['Haste'].concat(items).join(', ');
+  const eff = 'Whenever Skullbriar, the Walking Grave deals combat damage to a player, put a +1/+1 counter on it.';
+  document.getElementById('lc-text').innerHTML = `<div class="lc-kw">${kw}</div><div class="lc-eff">${eff}</div>`;
+  document.getElementById('cardview').classList.add('show');
 }
 document.getElementById('cardview').addEventListener('click', e=>{ if(e.target.id==='cardview') document.getElementById('cardview').classList.remove('show'); });
 
